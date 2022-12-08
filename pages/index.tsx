@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { FlattenedFormErrors } from "../types";
 
@@ -10,7 +11,9 @@ function Errors({ errors }: { errors?: string[] }) {
   return (
     <div>
       {errors.map((err) => (
-        <p key={err}>{err}</p>
+        <span key={err} style={{ color: "red" }}>
+          {err}
+        </span>
       ))}
     </div>
   );
@@ -18,6 +21,7 @@ function Errors({ errors }: { errors?: string[] }) {
 
 export default function Home() {
   const [errors, setErrors] = useState<FlattenedFormErrors>();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +40,7 @@ export default function Home() {
     });
 
     if (response.ok) {
-      return;
+      router.push("/yippie?name=" + data.name);
     }
 
     const jsonResponse = await response.json();
