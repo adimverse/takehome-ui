@@ -56,20 +56,37 @@ export default function Home() {
       <main>
         <h1>Welcome to the Adim UI Takehome!</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" name="name" />
-          <Errors errors={errors?.fieldErrors?.name} />
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: 16 }}
+        >
+          <div>
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" name="name" />
+            <Errors errors={errors?.fieldErrors?.name} />
+          </div>
 
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" />
-          <Errors errors={errors?.fieldErrors?.email} />
+          <div>
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" name="username" />
+            <Errors errors={errors?.fieldErrors?.username} />
+          </div>
 
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" />
-          <Errors errors={errors?.fieldErrors?.password} />
+          <div>
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" />
+            <Errors errors={errors?.fieldErrors?.email} />
+          </div>
 
-          <button type="submit">Submit</button>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" />
+            <Errors errors={errors?.fieldErrors?.password} />
+          </div>
+
+          <div>
+            <button type="submit">Submit</button>
+          </div>
         </form>
       </main>
     </div>
