@@ -1,12 +1,48 @@
 import Head from "next/head";
+import { useState } from "react";
+import { FlattenedFormErrors } from "../types";
+
+function Errors({ errors }: { errors?: string[] }) {
+  if (!errors?.length) {
+    return null;
+  }
+
+  return (
+    <div>
+      {errors.map((err) => (
+        <p key={err}>{err}</p>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [errors, setErrors] = useState<FlattenedFormErrors>();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
+
+    setErrors(undefined);
+
+    const response = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      return;
+    }
+
+    const jsonResponse = await response.json();
+    if (jsonResponse.errors) {
+      setErrors(jsonResponse.errors);
+    }
   };
 
   return (
@@ -23,15 +59,15 @@ export default function Home() {
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" name="name" />
+          <Errors errors={errors?.fieldErrors?.name} />
 
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" />
+          <Errors errors={errors?.fieldErrors?.email} />
 
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" />
-
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" />
+          <Errors errors={errors?.fieldErrors?.password} />
 
           <button type="submit">Submit</button>
         </form>
